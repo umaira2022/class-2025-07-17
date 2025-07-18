@@ -107,3 +107,30 @@ plot_predictions(fit_call, type = "prob", by = c("ethnicity", "city", "quality")
   )
 
 ```
+
+```{r}
+library(marginaleffects)
+library(ggplot2)
+library(plotly)
+
+# Create the ggplot object first
+p <- plot_predictions(fit_call, type = "prob", by = c("ethnicity", "city", "quality")) +
+  labs(
+    title = "Predicted Callbacks by Ethnicity, City, and Resume Quality",
+    subtitle = "White applicants receive more callbacks; resume quality and city also play roles.",
+    x = "Ethnicity",
+    y = "Predicted Probability of Callback",
+    caption = "Source: Resume Audit Study (2000)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+# Convert to interactive plot
+ggplotly(p, tooltip = c("x", "y", "group"))
+
+```
