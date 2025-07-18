@@ -8,6 +8,7 @@ execute:
 
 ```{r}
 #| message: false
+#| warning: false
 
 library(tidyverse)
 library(tidymodels)
@@ -30,6 +31,14 @@ Bertrand, Marianne and Sendhil Mullainathan. 2004. "Are Emily and Greg More Empl
 ## Two Scenarios
 
 * Imagine that you are a contemporary historian studying US employment in the year 2000 in Baltimore. You want to understand the process by which some people got jobs and some did not.
+
+
+Units:	Individuals of working age (typically 18–65) residing in Baltimore in 2000
+Outcome:	Employment status (Employed vs. Unemployed)
+Treatment / Covariate(s):	Education level, age, gender, race/ethnicity, job training history, prior employment, criminal record, neighborhood of residence
+Data Source	U.S. Census 2000, Baltimore Department of Labor records, local
+
+
 
 * Imagine that you work for a civil rights organization in Chicago. You want to understand the process by which black US citizens are discriminated against in hiring today.
 
@@ -70,3 +79,31 @@ $$
 What are the questions you want to answer?
 
 How can you use the **marginaleffects** package to answer them?
+
+
+```{r}
+
+predictions(fit_call,type="prob")
+```
+
+
+```{r}
+library(marginaleffects)
+library(ggplot2)
+
+plot_predictions(fit_call, type = "prob", by = c("ethnicity", "city", "quality")) +
+  labs(
+    title = "Predicted Callbacks by Ethnicity, City, and Resume Quality",
+    subtitle = "Quality and location both influence how ethnicity affects hiring callbacks",
+    x = "Ethnicity",
+    y = "Predicted Probability of Callback",
+    caption = "Source: Data from the resume audit study"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+```
